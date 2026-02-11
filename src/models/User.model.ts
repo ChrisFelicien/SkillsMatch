@@ -96,14 +96,6 @@ UserSchema.methods.passwordChangedAfter = function (
   return TokenIssuedAt < passwordChangedAtTimestamp;
 };
 
-UserSchema.methods.changePassword = async function (newPassword: string) {
-  this.password = newPassword;
-  this.passwordChangedAt = Date.now() - 1000;
-  await this.save();
-
-  return;
-};
-
 const User = model<IUser>("User", UserSchema);
 
 export default User;

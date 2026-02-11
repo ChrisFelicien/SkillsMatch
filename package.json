@@ -4,7 +4,7 @@
   "description": "A professional, scalable, and fully typed Node.js + Express + TypeScript backend designed to connect freelancers with clients. SkillsMatch provides secure authentication, job management, and an application system following modern backend best practices and production‑ready architecture.",
   "main": "index.js",
   "scripts": {
-    "test": "jest",
+    "test": "jest --watchAll --no-cache",
     "dev": "nodemon",
     "start": "node dist/server.js",
     "build": "tsc && tsc-alias",
