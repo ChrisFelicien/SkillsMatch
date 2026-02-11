@@ -93,7 +93,7 @@ UserSchema.methods.passwordChangedAfter = function (
   const passwordChangedAtTimestamp = Math.floor(
     this.passwordChangedAt.getTime() / MILLISECONDS_IN_SECOND
   );
-  return TokenIssuedAt < passwordChangedAtTimestamp;
+  return passwordChangedAtTimestamp > TokenIssuedAt;
 };
 
 const User = model<IUser>("User", UserSchema);
