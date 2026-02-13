@@ -4,18 +4,10 @@ import { IUser } from "@/interfaces/IUser";
 import User from "@/models/User.model";
 import AppError from "@/utils/AppError";
 import { generateAccessToken, generateRefreshToken } from "@/utils/jwt";
+import logger from "@/utils/logger";
 
 class AuthService {
   async register(userData: Partial<IUser>): Promise<IAuthResponse> {
-    // verify if there's any user with this email
-    if (!userData.email) throw new AppError("Email is required", 400);
-
-    const existingUser = await User.findOne({ email: userData.email });
-
-    if (existingUser) {
-      throw new AppError("Email already in use", 400);
-    }
-
     const newUser = await User.create(userData);
 
     const accessToken = generateAccessToken({
@@ -29,6 +21,8 @@ class AuthService {
 
     const userObj = newUser.toObject();
     delete userObj.password;
+
+    logger.info("Account created", { id: userObj._id });
 
     return {
       user: userObj,

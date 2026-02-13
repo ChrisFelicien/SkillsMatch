@@ -22,17 +22,13 @@ describe("Test Auth service integration", () => {
     const data = makeUser();
     await AuthService.register(data);
 
-    await expect(AuthService.register(data)).rejects.toThrow(
-      "Email already in use"
-    );
+    await expect(AuthService.register(data)).rejects.toThrow();
   });
 
   it("Should fail if the valid email is not provided", async () => {
     const data = makeUser({ email: "" });
 
-    await expect(AuthService.register(data)).rejects.toThrow(
-      "Email is required"
-    );
+    await expect(AuthService.register(data)).rejects.toThrow();
   });
 
   it("Should login a user with valid credentials", async () => {

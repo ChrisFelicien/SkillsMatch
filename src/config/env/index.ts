@@ -12,7 +12,7 @@ const config = {
     .JWT_REFRESH_TOKEN_EXPIRE_IN as ms.StringValue,
 
   COOKIE_EXPIRE_IN: (7 * 24 * 60 * 60 * 1000) as number, // Expire in 7 days
-  NODE_ENV: process.env.NODE_ENV || "development"
+  NODE_ENV: process.env.NODE_ENV as string
 };
 
 export default config;
