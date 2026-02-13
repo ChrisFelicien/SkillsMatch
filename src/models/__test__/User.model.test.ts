@@ -12,6 +12,7 @@ describe("Auth test user model", () => {
     const user = await User.create(data);
 
     expect(user.password).not.toBe("newPassword");
+    expect(user.password).toMatch(/^\$2[aby]\$/);
   });
 
   it("Should fail when email is invalid", async () => {
