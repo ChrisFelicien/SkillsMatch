@@ -8,7 +8,7 @@ export const makeJob = (override?: Partial<IJob>) => {
     category: "Computer science",
     skillsRequired: ["React", "Node", "express", "mongo"],
     budget: 2400,
-    deadline: new Date(2026 / 6 / 25),
+    deadline: new Date("2026 / 6 / 25"),
 
     ...override
   };
