@@ -5,6 +5,7 @@ import config from "@/config/env";
 import User from "@/models/User.model";
 import { IJwt } from "@/interfaces/IJwt";
 import logger from "@/utils/logger";
+import { UserRoles } from "@/interfaces/IUser";
 
 export const protect = async (
   req: Request,
@@ -48,4 +49,19 @@ export const protect = async (
   } catch (error) {
     next(error);
   }
+};
+
+export const restrictTo = (...allowedRole: UserRoles[]) => {
+  return (req: Request, res: Response, next: NextFunction) => {
+    const user = req.user;
+
+    if (!user || !allowedRole.includes(user.role)) {
+      throw new AppError(
+        "Forbidden: You do not have permission to perform this action",
+        403
+      );
+    }
+
+    next();
+  };
 };
