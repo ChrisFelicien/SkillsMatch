@@ -37,12 +37,7 @@ describe("Test get all jobs integration", () => {
         budget: 100,
         clientId: user._id
       }),
-      makeJob({
-        title: "Node Expert",
-        category: "Web",
-        budget: 500,
-        clientId: user._id
-      }),
+
       makeJob({
         title: "Web Designer",
         category: "Design",
@@ -51,13 +46,24 @@ describe("Test get all jobs integration", () => {
       })
     ]);
 
+    await Job.create(
+      makeJob(
+        makeJob({
+          title: "Node Expert",
+          category: "Web",
+          budget: 500,
+          clientId: user._id
+        })
+      )
+    );
+
     const result = await JobServices.getAllJobs({
       category: "Web",
       minBudget: 400
     });
 
     expect(result.jobs).toHaveLength(2);
-    expect(result.jobs[0]?.title).toBe("React Developer");
+    expect(result.jobs[0]?.title).toBe("Node Expert");
   });
 
   it("Should search jobs by title using regex", async () => {
@@ -93,5 +99,38 @@ describe("Test get all jobs integration", () => {
     expect(result.jobs).toHaveLength(2);
     expect(result.jobs[0]?.category).toBe("Design");
     expect(result.jobs[1]?.category).toBe("Developer");
+  });
+});
+
+describe("Test delete job integration", () => {
+  it("Should reject the deletion if the job do not belongs to the client", async () => {
+    const job = await Job.create(
+      makeJob({
+        clientId: user._id
+      })
+    );
+
+    const newUser = await User.create(
+      makeUser({ email: "testingemail@gmail.com" })
+    );
+
+    await expect(
+      JobServices.deleteJob(job._id.toString(), newUser._id.toString())
+    ).rejects.toThrow("No job found for this user with this id");
+  });
+
+  it("Should delete the job if the current user is the job owner", async () => {
+    const job = await Job.create(
+      makeJob({
+        clientId: user._id
+      })
+    );
+    const result = await JobServices.deleteJob(
+      job._id.toString(),
+      user._id.toString()
+    );
+
+    expect(result.message).toBe("Job deleted");
+    expect(await Job.findById(job._id)).toBeNull();
   });
 });

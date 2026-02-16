@@ -1,5 +1,6 @@
 import { IJob } from "@/interfaces/IJob";
 import Job from "@/models/Job.model";
+import AppError from "@/utils/AppError";
 import logger from "@/utils/logger";
 import { Types } from "mongoose";
 
@@ -45,12 +46,34 @@ class JobServices {
     let limit: number = query.limit || 10;
     const skip: number = (page - 1) * limit; // Number of items must be skipped
 
-    const jobs = await Job.find(queryObject).skip(skip).limit(limit);
+    const jobs = await Job.find(queryObject)
+      .skip(skip)
+      .limit(limit)
+      .sort("-createdAt");
     const totalJobs = await Job.countDocuments(queryObject);
 
     return {
-      totals: jobs.length,
+      totalJobs,
       jobs
+    };
+  }
+
+  async deleteJob(jobId: string, clientId: string) {
+    const job = await Job.findOneAndDelete({ _id: jobId, clientId }); // This find unique job
+
+    if (!job) {
+      logger.error(
+        `the user with id ${clientId} tried to delete job without the right access`,
+        {
+          id: clientId
+        }
+      );
+      throw new AppError("No job found for this user with this id", 404);
+    }
+
+    logger.info("Job deleted", { id: job._id });
+    return {
+      message: "Job deleted"
     };
   }
 }
