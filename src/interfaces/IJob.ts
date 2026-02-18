@@ -1,4 +1,4 @@
-import { Types } from "mongoose";
+import { Types, Document } from "mongoose";
 
 export enum JobStatus {
   IN_PROGRESS = "in_progress",
@@ -8,7 +8,7 @@ export enum JobStatus {
   CANCELED = "canceled"
 }
 
-export interface IJob {
+export interface IJob extends Document {
   title: string;
   description: string;
   category: string;
