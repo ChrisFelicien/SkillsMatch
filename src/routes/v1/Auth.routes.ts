@@ -1,13 +1,17 @@
 import { Request, Response, NextFunction, Router } from "express";
-import { login, register } from "@/controllers/Auth.controller";
+import AuthController from "@/controllers/Auth.controller";
 import { loginSchema, registerSchema } from "@/schemas/user.Schema";
 import validateSchema from "@/middlewares/validate";
 import { protect } from "@/middlewares/Auth.middleware";
 
 const router = Router();
 
-router.post("/login", validateSchema(loginSchema), login);
-router.post("/register", validateSchema(registerSchema), register);
+router.post("/login", validateSchema(loginSchema), AuthController.login);
+router.post(
+  "/register",
+  validateSchema(registerSchema),
+  AuthController.register
+);
 router.get(
   "/me",
   protect,
