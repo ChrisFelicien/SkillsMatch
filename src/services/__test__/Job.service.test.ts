@@ -67,7 +67,7 @@ describe("Test get all jobs integration", () => {
   });
 
   it("Should search jobs by title using regex", async () => {
-    await Job.create([
+    await Job.insertMany([
       makeJob({
         title: "React Developer",
         category: "Web",
