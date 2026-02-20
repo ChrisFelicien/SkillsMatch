@@ -1,6 +1,6 @@
 import { IJob } from "@/interfaces/IJob";
 
-export const makeJob = (override?: Partial<IJob>) => {
+export const makeJob = (override?: Partial<IJob>): Partial<IJob> => {
   return {
     title: "Software Engineer",
     description:
